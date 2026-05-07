@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório Lógico Mobile</title>
+    <style>
+        /* Base e Responsividade */
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: #f0f2f5; 
+            color: #333; 
+            padding: 15px; 
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        h1 { 
+            text-align: center; 
+            color: #2c3e50; 
+            font-size: 1.5rem; 
+            margin: 10px 0;
+        }
+
+        /* Container que organiza os cartões */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .gate-card { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 15px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            border-top: 5px solid #3498db; 
+            display: flex; 
+            flex-direction: column;
+        }
+
+        .gate-name { font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; color: #2c3e50; }
+        .gate-desc { font-size: 0.8rem; color: #7f8c8d; margin-bottom: 15px; min-height: 35px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        
+        .interface { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .switches { display: flex; gap: 12px; }
+        .switch-box { text-align: center; }
+        .label-key { font-size: 0.7rem; color: #95a5a6; font-weight: bold; margin-bottom: 4px; display: block; }
+        
+        /* Botões Maiores para Celular */
+        .btn-logic { 
+            width: 60px; 
+            height: 60px; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            font-size: 1.4rem;
+            -webkit-tap-highlight-color: transparent; /* Remove brilho de toque no Android/iOS */
+        }
+
+        .off { background: #ecf0f1; color: #bdc3c7; border: 2px solid #bdc3c7; }
+        .on { background: #2ecc71; color: white; border: 2px solid #27ae60; box-shadow: 0 4px 0 #27ae60; }
+        
+        .output-zone { text-align: center; padding-left: 10px; }
+        .lamp { 
+            width: 55px; 
+            height: 55px; 
+            border-radius: 50%; 
+            background: #bdc3c7; 
+            margin: 0 auto 5px; 
+            transition: 0.3s; 
+            border: 4px solid #7f8c8d; 
+        }
+        .lamp.active { background: #f1c40f; box-shadow: 0 0 20px #f1c40f; border-color: #f39c12; }
+        .status-label { font-weight: bold; font-size: 0.75rem; color: #34495e; }
+
+        /* Ajustes extras para telas muito pequenas */
+        @media (max-width: 350px) {
+            .btn-logic { width: 50px; height: 50px; }
+            .lamp { width: 45px; height: 45px; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Laboratório Digital Portátil</h1>
+
+    <div class="grid-container">
+        <div class="gate-card" style="border-top-color: #2980b9;">
+            <div class="gate-name">AND (E)</div>
+            <div class="gate-desc">Saída 1 só se A e B forem 1.</div>
+            <div class="interface">
+                <div class="switches">
+                    <div class="switch-box"><span class="label-key">A</span><button class="btn-logic off" onclick="it(this, 'and')">0</button></div>
+                    <div class="switch-box"><span class="label-key">B</span><button class="btn-logic off" onclick="it(this, 'and')">0</button></div>
+                </div>
+                <div class="output-zone"><div id="lamp-and" class="lamp"></div><div class="status-label">SAÍDA</div></div>
+            </div>
+        </div>
+
+        <div class="gate-card" style="border-top-color: #27ae60;">
+            <div class="gate-name">OR (OU)</div>
+            <div class="gate-desc">Saída 1 se qualquer entrada for 1.</div>
+            <div class="interface">
+                <div class="switches">
+                    <div class="switch-box"><span class="label-key">A</span><button class="btn-logic off" onclick="it(this, 'or')">0</button></div>
+                    <div class="switch-box"><span class="label-key">B</span><button class="btn-logic off" onclick="it(this, 'or')">0</button></div>
+                </div>
+                <div class="output-zone"><div id="lamp-or" class="lamp"></div><div class="status-label">SAÍDA</div></div>
+            </div>
+        </div>
+
+        <div class="gate-card" style="border-top-color: #e67e22;">
+            <div class="gate-name">NOT (NÃO)</div>
+            <div class="gate-desc">Inverte o sinal da entrada A.</div>
+            <div class="interface">
+                <div class="switches">
+                    <div class="switch-box"><span class="label-key">A</span><button class="btn-logic off" onclick="it(this, 'not')">0</button></div>
+                </div>
+                <div class="output-zone"><div id="lamp-not" class="lamp active"></div><div class="status-label">SAÍDA</div></div>
+            </div>
+        </div>
+
+        <div class="gate-card" style="border-top-color: #8e44ad;">
+            <div class="gate-name">XOR (OU Excl.)</div>
+            <div class="gate-desc">Saída 1 se entradas forem diferentes.</div>
+            <div class="interface">
+                <div class="switches">
+                    <div class="switch-box"><span class="label-key">A</span><button class="btn-logic off" onclick="it(this, 'xor')">0</button></div>
+                    <div class="switch-box"><span class="label-key">B</span><button class="btn-logic off" onclick="it(this, 'xor')">0</button></div>
+                </div>
+                <div class="output-zone"><div id="lamp-xor" class="lamp"></div><div class="status-label">SAÍDA</div></div>
+            </div>
+        </div>
+
+        <div class="gate-card" style="border-top-color: #c0392b;">
+            <div class="gate-name">NAND (Não E)</div>
+            <div class="gate-desc">Inverso da AND.</div>
+            <div class="interface">
+                <div class="switches">
+                    <div class="switch-box"><span class="label-key">A</span><button class="btn-logic off" onclick="it(this, 'nand')">0</button></div>
+                    <div class="switch-box"><span class="label-key">B</span><button class="btn-logic off" onclick="it(this, 'nand')">0</button></div>
+                </div>
+                <div class="output-zone"><div id="lamp-nand" class="lamp active"></div><div class="status-label">SAÍDA</div></div>
+            </div>
+        </div>
+
+        <div class="gate-card" style="border-top-color: #7f8c8d;">
+            <div class="gate-name">NOR (Não OU)</div>
+            <div class="gate-desc">Inverso da OR.</div>
+            <div class="interface">
+                <div class="switches">
+                    <div class="switch-box"><span class="label-key">A</span><button class="btn-logic off" onclick="it(this, 'nor')">0</button></div>
+                    <div class="switch-box"><span class="label-key">B</span><button class="btn-logic off" onclick="it(this, 'nor')">0</button></div>
+                </div>
+                <div class="output-zone"><div id="lamp-nor" class="lamp active"></div><div class="status-label">SAÍDA</div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function it(btn, type) {
+            btn.innerText = btn.innerText === "0" ? "1" : "0";
+            btn.className = btn.innerText === "1" ? "btn-logic on" : "btn-logic off";
+            updateGates();
+        }
+
+        function updateGates() {
+            const types = ['and', 'or', 'not', 'xor', 'nand', 'nor'];
+            types.forEach(t => {
+                const card = document.querySelector(`.gate-card:has(button[onclick*='${t}'])`);
+                const btns = Array.from(card.querySelectorAll('.btn-logic'));
+                const vals = btns.map(b => b.innerText === "1");
+                const lamp = document.getElementById('lamp-' + t);
+                let res = false;
+                const a = vals[0];
+                const b = vals[1];
+
+                switch(t) {
+                    case 'and': res = (a && b); break;
+                    case 'or':  res = (a || b); break;
+                    case 'not': res = !a; break;
+                    case 'xor': res = (a !== b); break;
+                    case 'nand': res = !(a && b); break;
+                    case 'nor':  res = !(a || b); break;
+                }
+                res ? lamp.classList.add('active') : lamp.classList.remove('active');
+            });
+        }
+    </script>
+</body>
+</html>
