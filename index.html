@@ -32,12 +32,12 @@
         gap:25px;
     }
 
-    /* COLUNA DAS CHAVES */
+    /* COLUNA DAS CHAVES - Cor de fundo neutra para destacar os botões */
     .inputs{
         display:flex;
         flex-direction:column;
         gap:12px;
-        background:#b40000;
+        background:#444;
         padding:12px;
         border-radius:12px;
     }
@@ -49,8 +49,8 @@
     }
 
     .bit{
-        width:35px;
-        height:35px;
+        width:45px;
+        height:45px;
         display:flex;
         align-items:center;
         justify-content:center;
@@ -58,14 +58,19 @@
         font-weight:bold;
         border-radius:6px;
         color:white;
+        cursor:pointer; /* Indica que o número é clicável */
+        user-select:none;
+        transition: 0.2s;
     }
 
+    /* CORES INVERTIDAS: Positivo Azul, Negativo Vermelho */
     .bit.on{
-        background:#d40000;
+        background:#0040ff;
+        box-shadow: 0 0 10px #0040ff;
     }
 
     .bit.off{
-        background:#0040ff;
+        background:#d40000;
     }
 
     .switch{
@@ -79,8 +84,8 @@
     }
 
     .switch.active{
-        background:#ff3030;
-        box-shadow:0 0 10px red;
+        background:#30a0ff;
+        box-shadow:0 0 10px #0040ff;
     }
 
     /* ÁREA CENTRAL */
@@ -102,14 +107,15 @@
         transition:0.2s;
     }
 
+    /* LINHAS COM CORES INVERTIDAS */
     .linha.on{
-        background:red;
-        box-shadow:0 0 8px red;
+        background:#0040ff;
+        box-shadow:0 0 8px #0040ff;
     }
 
     .linha.off{
-        background:#0040ff;
-        box-shadow:0 0 8px #0040ff;
+        background:#d40000;
+        box-shadow:0 0 8px #d40000;
     }
 
     .porta-wrapper {
@@ -134,7 +140,7 @@
         justify-content:center;
     }
 
-    /* SAÍDA */
+    /* SAÍDA COM CORES INVERTIDAS */
     .saida{
         width:60px;
         height:60px;
@@ -148,13 +154,13 @@
     }
 
     .saida.on{
-        background:red;
-        box-shadow:0 0 12px red;
+        background:#0040ff;
+        box-shadow:0 0 12px #0040ff;
     }
 
     .saida.off{
-        background:#0040ff;
-        box-shadow:0 0 12px #0040ff;
+        background:#d40000;
+        box-shadow:0 0 12px #d40000;
     }
 
     h1{
@@ -172,90 +178,30 @@
 <script>
 
 const portasSVG = {
-
-AND: `
-<svg width="140" height="120" viewBox="0 0 140 120">
-  <path d="M20 10 L70 10 Q125 60 70 110 L20 110 Z"
-  fill="#f5c86a" stroke="#b97b00" stroke-width="4"/>
-</svg>`,
-
-OR: `
-<svg width="140" height="120" viewBox="0 0 140 120">
-  <path d="M20 10 Q55 60 20 110 Q90 110 125 60 Q90 10 20 10"
-  fill="#f5c86a" stroke="#b97b00" stroke-width="4"/>
-</svg>`,
-
-NAND: `
-<svg width="160" height="120" viewBox="0 0 160 120">
-  <path d="M20 10 L70 10 Q125 60 70 110 L20 110 Z"
-  fill="#f5c86a" stroke="#b97b00" stroke-width="4"/>
-  <circle cx="140" cy="60" r="10" fill="white" stroke="#b97b00" stroke-width="4"/>
-</svg>`,
-
-NOR: `
-<svg width="160" height="120" viewBox="0 0 160 120">
-  <path d="M20 10 Q55 60 20 110 Q90 110 125 60 Q90 10 20 10"
-  fill="#f5c86a" stroke="#b97b00" stroke-width="4"/>
-  <circle cx="140" cy="60" r="10" fill="white" stroke="#b97b00" stroke-width="4"/>
-</svg>`,
-
-XOR: `
-<svg width="150" height="120" viewBox="0 0 150 120">
-  <path d="M28 10 Q63 60 28 110"
-  fill="none" stroke="#b97b00" stroke-width="4"/>
-  <path d="M40 10 Q75 60 40 110 Q105 110 135 60 Q105 10 40 10"
-  fill="#f5c86a" stroke="#b97b00" stroke-width="4"/>
-</svg>`,
-
-XNOR: `
-<svg width="170" height="120" viewBox="0 0 170 120">
-  <path d="M28 10 Q63 60 28 110"
-  fill="none" stroke="#b97b00" stroke-width="4"/>
-  <path d="M40 10 Q75 60 40 110 Q105 110 135 60 Q105 10 40 10"
-  fill="#f5c86a" stroke="#b97b00" stroke-width="4"/>
-  <circle cx="155" cy="60" r="10" fill="white" stroke="#b97b00" stroke-width="4"/>
-</svg>`,
-
-NOT: `
-<svg width="150" height="120" viewBox="0 0 150 120">
-  <polygon points="20,10 20,110 110,60"
-  fill="#f5c86a" stroke="#b97b00" stroke-width="4"/>
-  <circle cx="125" cy="60" r="10" fill="white" stroke="#b97b00" stroke-width="4"/>
-</svg>`
+    AND: `<svg width="140" height="120" viewBox="0 0 140 120"><path d="M20 10 L70 10 Q125 60 70 110 L20 110 Z" fill="#f5c86a" stroke="#b97b00" stroke-width="4"/></svg>`,
+    OR: `<svg width="140" height="120" viewBox="0 0 140 120"><path d="M20 10 Q55 60 20 110 Q90 110 125 60 Q90 10 20 10" fill="#f5c86a" stroke="#b97b00" stroke-width="4"/></svg>`,
+    NAND: `<svg width="160" height="120" viewBox="0 0 160 120"><path d="M20 10 L70 10 Q125 60 70 110 L20 110 Z" fill="#f5c86a" stroke="#b97b00" stroke-width="4"/><circle cx="140" cy="60" r="10" fill="white" stroke="#b97b00" stroke-width="4"/></svg>`,
+    NOR: `<svg width="160" height="120" viewBox="0 0 160 120"><path d="M20 10 Q55 60 20 110 Q90 110 125 60 Q90 10 20 10" fill="#f5c86a" stroke="#b97b00" stroke-width="4"/><circle cx="140" cy="60" r="10" fill="white" stroke="#b97b00" stroke-width="4"/></svg>`,
+    XOR: `<svg width="150" height="120" viewBox="0 0 150 120"><path d="M28 10 Q63 60 28 110" fill="none" stroke="#b97b00" stroke-width="4"/><path d="M40 10 Q75 60 40 110 Q105 110 135 60 Q105 10 40 10" fill="#f5c86a" stroke="#b97b00" stroke-width="4"/></svg>`,
+    XNOR: `<svg width="170" height="120" viewBox="0 0 170 120"><path d="M28 10 Q63 60 28 110" fill="none" stroke="#b97b00" stroke-width="4"/><path d="M40 10 Q75 60 40 110 Q105 110 135 60 Q105 10 40 10" fill="#f5c86a" stroke="#b97b00" stroke-width="4"/><circle cx="155" cy="60" r="10" fill="white" stroke="#b97b00" stroke-width="4"/></svg>`,
+    NOT: `<svg width="150" height="120" viewBox="0 0 150 120"><polygon points="20,10 20,110 110,60" fill="#f5c86a" stroke="#b97b00" stroke-width="4"/><circle cx="125" cy="60" r="10" fill="white" stroke="#b97b00" stroke-width="4"/></svg>`
 };
 
-const tipos = [
-    "AND",
-    "OR",
-    "NAND",
-    "NOR",
-    "XOR",
-    "XNOR",
-    "NOT"
-];
-
+const tipos = ["AND", "OR", "NAND", "NOR", "XOR", "XNOR", "NOT"];
 const container = document.getElementById("container");
 
 tipos.forEach(tipo => criarCircuito(tipo));
 
 function criarCircuito(tipo){
-
     const circuito = document.createElement("div");
     circuito.className = "circuito";
-
-    // Quantidade de entradas
     const entradas = tipo === "NOT" ? 1 : 3;
-
-    // COLUNA DAS CHAVES
     const inputs = document.createElement("div");
     inputs.className = "inputs";
-
     let estados = [];
 
-    for(let i=0;i<entradas;i++){
-
+    for(let i=0; i<entradas; i++){
         estados.push(1);
-
         const row = document.createElement("div");
         row.className = "switch-row";
 
@@ -266,124 +212,75 @@ function criarCircuito(tipo){
         const sw = document.createElement("button");
         sw.className = "switch active";
 
-        sw.onclick = ()=>{
-
+        // Função de clique unificada (para o botão e para o número)
+        const alternar = () => {
             estados[i] = estados[i] ? 0 : 1;
-
             bit.innerText = estados[i];
-
             bit.className = estados[i] ? "bit on" : "bit off";
-
-            sw.className = estados[i]
-                ? "switch active"
-                : "switch";
-
+            sw.className = estados[i] ? "switch active" : "switch";
             atualizar();
         };
 
+        bit.onclick = alternar; // Clique direto no número
+        sw.onclick = alternar;  // Clique no botão redondo
+
         row.appendChild(bit);
         row.appendChild(sw);
-
         inputs.appendChild(row);
     }
 
-    // MEIO
     const meio = document.createElement("div");
     meio.className = "meio";
-
     const linhas = document.createElement("div");
     linhas.className = "linhas";
-
     let linhasHTML = [];
-
-    for(let i=0;i<entradas;i++){
-        linhasHTML.push(`<div class="linha on"></div>`);
-    }
-
+    for(let i=0; i<entradas; i++) { linhasHTML.push(`<div class="linha on"></div>`); }
     linhas.innerHTML = linhasHTML.join("");
 
-    // --- NOVA ESTRUTURA PARA O NOME ---
     const portaWrapper = document.createElement("div");
     portaWrapper.className = "porta-wrapper";
-
     const label = document.createElement("div");
     label.className = "label-porta";
-    label.innerText = tipo; // Define o nome da porta
-
+    label.innerText = tipo;
     const porta = document.createElement("div");
     porta.className = "porta";
     porta.innerHTML = portasSVG[tipo];
-
     portaWrapper.appendChild(label);
     portaWrapper.appendChild(porta);
-    // ----------------------------------
 
-    // SAÍDA
     const saida = document.createElement("div");
     saida.className = "saida on";
     saida.innerText = "1";
 
     meio.appendChild(linhas);
-    meio.appendChild(portaWrapper); // Adiciona o wrapper com o nome
-
+    meio.appendChild(portaWrapper);
     circuito.appendChild(inputs);
     circuito.appendChild(meio);
     circuito.appendChild(saida);
-
     container.appendChild(circuito);
 
     function atualizar(){
-
-        // Atualiza linhas
         const linhasDOM = linhas.querySelectorAll(".linha");
-
         estados.forEach((estado,index)=>{
-            linhasDOM[index].className =
-                estado ? "linha on" : "linha off";
+            linhasDOM[index].className = estado ? "linha on" : "linha off";
         });
 
         let resultado = 0;
-
         switch(tipo){
-
-            case "AND":
-                resultado = estados.every(v=>v===1) ? 1 : 0;
-            break;
-
-            case "OR":
-                resultado = estados.some(v=>v===1) ? 1 : 0;
-            break;
-
-            case "NAND":
-                resultado = estados.every(v=>v===1) ? 0 : 1;
-            break;
-
-            case "NOR":
-                resultado = estados.some(v=>v===1) ? 0 : 1;
-            break;
-
-            case "XOR":
-                resultado = estados.filter(v=>v===1).length % 2;
-            break;
-
-            case "XNOR":
-                resultado = !(estados.filter(v=>v===1).length % 2) ? 1 : 0;
-            break;
-
-            case "NOT":
-                resultado = estados[0] ? 0 : 1;
-            break;
+            case "AND": resultado = estados.every(v=>v===1) ? 1 : 0; break;
+            case "OR": resultado = estados.some(v=>v===1) ? 1 : 0; break;
+            case "NAND": resultado = estados.every(v=>v===1) ? 0 : 1; break;
+            case "NOR": resultado = estados.some(v=>v===1) ? 0 : 1; break;
+            case "XOR": resultado = estados.filter(v=>v===1).length % 2; break;
+            case "XNOR": resultado = !(estados.filter(v=>v===1).length % 2) ? 1 : 0; break;
+            case "NOT": resultado = estados[0] ? 0 : 1; break;
         }
 
         saida.innerText = resultado;
-
-        saida.className =
-            resultado ? "saida on" : "saida off";
+        saida.className = resultado ? "saida on" : "saida off";
     }
-
     atualizar();
 }
-
 </script>
 
 </body>
